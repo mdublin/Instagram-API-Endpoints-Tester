@@ -30,7 +30,7 @@ access_code = access_code_url_split[1]
 
 # OAuthURL is the same URL passed to drive.get() above but appened with &response_type=code
 # https://api.instagram.com/oauth/authorize/?client_id={}&redirect_uri={}&response_type=code"
-OAuthURL = {Instagram authorization URL + client id + redirect uri + &response_type = code}
+OAuthURL = "{Instagram authorization URL + client id + redirect uri + &response_type = code}"
 
 
 client_id = {your app client id}
@@ -148,14 +148,14 @@ def search_for_user(username, *args):
 def get_media_info(media_id):
     get_media_url = "https://api.instagram.com/v1/media/%s?access_token=%s" % (
         media_id, current_token)
-    r = requests.get(get_media_url)
+    r = requests.get(get_media_url).text
     print(r)
     return r
 
 
 def get_media_short_code():
     media_short_url = "https://api.instagram.com/v1/media/shortcode/D?access_token=%s" % current_token
-    r = requests.get(media_short_url)
+    r = requests.get(media_short_url).text
     print(r)
     return r
 
@@ -176,14 +176,14 @@ def get_media_search(LAT, LNG, MIN_TIME, MAX_TIME, *args):
             'MIN_TIMESTAMP': '%s' % (MIN_TIME),
             'MAX_TIMESTAMP': '%s' % (MAX_TIME),
             'DISTANCE': '%s' % (DISTANCE)}
-    r = requests.get(media_search_url, params=payload)
+    r = requests.get(media_search_url, params=payload).text
     print(r)
     return r
 
 
 def popular_media():
-    popular_url = "https://api.instagram.com/v1/media/popular?access_token=%s" % curent_token
-    r = requests.get(popular_url)
+    popular_url = "https://api.instagram.com/v1/media/popular?access_token=%s" % current_token
+    r = requests.get(popular_url).text
     print(r)
     return r
 
@@ -220,7 +220,7 @@ def post_comment(comment, media_id):
 def delete_comment(media_id, comment_id):
     del_comment_url = 'https://api.instagram.com/v1/media/%s/comments/%s?access_token=%s' % s(
         media_id, comment_id, current_token)
-    r = requests.delete(del_comment_url)
+    r = requests.delete(del_comment_url).text
     print(r)
     return r
 
@@ -340,7 +340,7 @@ def relationship(user_id):
 def tag_info(tag_name):
     tag_info_url = 'https://api.instagram.com/v1/tags/%s?access_token=%s' % (
         tag_name, current_token)
-    r = requests.get(tag_info_url)
+    r = requests.get(tag_info_url).text
     print(r)
     return r
 
@@ -421,7 +421,7 @@ def recent_media_by_location(location_id, *kwargs):
                 'MIN_ID': '%s' % (MIN_ID),
                 'MAX_ID': '%s' % (MAX_ID),
                 'MAX_TIMESTAMP': '%s' % (MAX_TIMESTAMP)}
-            r = requests.get(recent_media_location_url, params=payload)
+            r = requests.get(recent_media_location_url, params=payload).text
     print (r)
     return r
 
@@ -640,41 +640,41 @@ def main():
     command = arguments.pop("command")
 
     if command == "user_info":
-        user_info = user_info(**arguments)
+        userinfo = user_info(**arguments)
     elif command == "user_feed":
-        user_feed = user_feed(**arguments)
+        userfeed = user_feed(**arguments)
     elif command == "recent_media":
-        recent_media = recent_media(**arguments)
+        recentmedia = recent_media(**arguments)
     elif command == "liked_media":
-        liked_media = liked_media(**arguments)
+        likedmedia = liked_media(**arguments)
     elif command == "search_for_user":
-        search_for_user == search_for_user(**arguments)
+        searchfor_user == search_for_user(**arguments)
     elif command == "get_media_id":
-        media_id = get_media_id(**arguments)
+        mediaid = get_media_id(**arguments)
     elif command == "get_media_info":
-        media_info = get_media_info(**arguments)
+        mediainfo = get_media_info(**arguments)
     elif command == "get_media_short_code":
-        media_short_code = get_media_short_code(**arguments)
+        mediashort_code = get_media_short_code(**arguments)
     elif command == "get_media_search":
-        media_search = get_media_search(**arguments)
+        mediasearch = get_media_search(**arguments)
     elif command == "popular_media":
-        popular_media = popular_media(**arguments)
+        popularmedia = popular_media(**arguments)
     elif command == "get_comments":
-        get_comments = get_comments(**arguments)
+        getcomments = get_comments(**arguments)
     # insert elif for COMMENTS and LIKES ENDPOINTS POST and DELETE requests
 
     elif command == "tag_info":
-        tag_info = tag_info(**arguments)
+        taginfo = tag_info(**arguments)
     elif command == "recently_tagged":
-        recently_tagged = recently_tagged(**arguments)
+        recentlytagged = recently_tagged(**arguments)
     elif command == "tag_search":
-        tag_search = tag_search(**arguments)
+        tagsearch = tag_search(**arguments)
     elif command == "get_location":
-        get_location = get_location(**arguments)
+        getlocation = get_location(**arguments)
     elif command == "recent_media_by_location":
-        recent_media_by_location = recent_media_by_location(**arguments)
+        recentmedia_by_location = recent_media_by_location(**arguments)
     elif command == "location_by_coordinate":
-        location_by_coordinate = location_by_coordinate(**arguments)
+        locationbycoordinate = location_by_coordinate(**arguments)
 
 if __name__ == "__main__":
     main()
