@@ -12,32 +12,96 @@ driver = webdriver.Chrome()
 # passing Instagram authorization URL with your client id and redirect uri inserted to drive.get()
 # Instagram authorization URL =
 # https://api.instagram.com/oauth/authorize/?client_id=CLIENT-ID&redirect_uri=REDIRECT-URI&response_type=code
-driver.get({Instagram authorization URL + client id + redirect uri})
-
-element = driver.find_element_by_name("username")
-element.send_keys({username})
-element = driver.find_element_by_name("password")
-element.send_keys({password})
-
-driver.find_element_by_xpath('//input[@value = "Log in"]').click()
-print("This is the current response URL: %s" % driver.current_url)
-print("\n")
-print("\n")
-access_code_url = driver.current_url
-# split the response URL with the access code @ "="
-access_code_url_split = access_code_url.split('=')
-access_code = access_code_url_split[1]
-
-# OAuthURL is the same URL passed to drive.get() above but appened with &response_type=code
-# https://api.instagram.com/oauth/authorize/?client_id={}&redirect_uri={}&response_type=code"
-OAuthURL = "{Instagram authorization URL + client id + redirect uri + &response_type = code}"
 
 
-client_id = {your app client id}
-client_secret = {your app client secret}
-authorization_redirect_uri = {app redirect uri}
+# takes user input for creds
+def get_creds(userCreds):
+    # store user creds in json file
+    with open('creds.json', 'r+') as f:
+        json.dump(userCreds, f)
+
+    user_name = userCreds.get('user_name')
+    password = userCreds.get('password')
+    client_id = userCreds.get('client_id')
+    client_secret = userCreds.get('client_secret')
+    redirect_uri = userCreds.get('redirect_uri')
+
+    # automate final token grab
+    CODE = grab_token(user_name, password)
+    print ("this is CODE: %s" % CODE)
+    final_token, id = Instagram_Request_Access(
+        client_id, client_secret, CODE, redirect_uri)
+    # store final token and id in json file
+    final_token_dict = {'final_token': final_token, 'id': id}
+    with open('finalToken.json', 'r+') as ft:
+        json.dump(final_token_dict, ft)
+        print ("final token and id stored in finalToken.json file")
+
+    return (final_token, id)
+
+
+def refresh_token():
+    """ get new token for session using same creds """
+    with open('creds.json') as json_data:
+        d = json.load(json_data)
+
+    user_name = d.get('user_name')
+    password = d.get('password')
+    client_id = d.get('client_id')
+    client_secret = d.get('client_secret')
+    redirect_uri = d.get('redirect_uri')
+
+    # automate final token grab
+    CODE = grab_token(user_name, password)
+    print "this is CODE: %s" % CODE
+    final_token, id = Instagram_Request_Access(
+        client_id, client_secret, CODE, redirect_uri)
+    # store final token and id in json file
+    final_token_dict = {'final_token': final_token, 'id': id}
+    with open('finalToken.json', 'r+') as ft:
+        json.dump(final_token_dict, ft)
+        print ("final token and id stored in finalToken.json file")
+
+    return (final_token, id)
+
+# when script runs final_token is always grabbed and assigned to current_token
+try:
+    with open('finalToken.json') as json_data:
+        d = json.load(json_data)
+        current_token = d.get('final_token')
+        user_id = d.get('id')
+except:
+    pass
+
+# start token grab process from browser
+
+
+def grab_token(user_name, password):
+
+    driver = webdriver.Chrome()
+    driver.get("https://api.instagram.com/oauth/authorize/?client_id=cb0096f08a3848e6a1b2b4601317355f&redirect_uri=http://pythondev.geometryfletch.com/instagramredirect.html&response_type=code")
+
+    element = driver.find_element_by_name("username")
+    element.send_keys("mddublin")
+    element = driver.find_element_by_name("password")
+    element.send_keys("buggy111")
+
+    driver.find_element_by_xpath('//input[@value = "Log in"]').click()
+    print "This is the current response URL: %s" % driver.current_url
+    print("\n")
+    print("\n")
+    access_code_url = driver.current_url
+    # split the response URL with the access code @ "="
+    access_code_url_split = access_code_url.split('=')
+    access_code = access_code_url_split[1]
+    print (access_code)
+    return access_code
+
+
+OAuthURL = "https://api.instagram.com/oauth/authorize/?client_id=cb0096f08a3848e6a1b2b4601317355f&redirect_uri=http://pythondev.geometryfletch.com/instagramredirect.html&response_type=code"
+
+
 grant_type = 'authorization_code'
-CODE = access_code
 
 
 def Instagram_Request_Access(
@@ -47,11 +111,11 @@ def Instagram_Request_Access(
         authorization_redirect_uri):
     """ requests final access token for the current session as well as user_id. The first string of numbers for the access token is typically the user_id, however this function digs out the user_id from the post response instead of the token """
     global final_token  # always hearing that using global variables is bad, is there another way to make final_token available globally?
-    print (client_id)
-    print (client_secret)
-    print (CODE)
-    print (authorization_redirect_uri)
-    print (grant_type)
+    print client_id
+    print client_secret
+    print CODE
+    print authorization_redirect_uri
+    print grant_type
     instaOAuthUrl = 'https://api.instagram.com/oauth/access_token'
     payload = {
         'client_id': '%s' % (client_id),
@@ -60,32 +124,22 @@ def Instagram_Request_Access(
         'redirect_uri': '%s' % (authorization_redirect_uri),
         'code': '%s' % (CODE)}
     flag = requests.post(instaOAuthUrl, data=payload).text
-    print (flag)
+    print flag
     json.loads(flag)['access_token']
     final_token = json.loads(flag)['access_token']
     innerDict = json.loads(flag)['user']
     for key, value in innerDict.iteritems():
         id = innerDict['id']
-    print("Here's the final Access Token for this session: %s" % final_token)
-    print("Here's the current User ID for this session: %s" % id)
+    print "Here's the final Access Token for this session: %s" % final_token
+    print "Here's the current User ID for this session: %s" % id
     return (final_token, id)
 
-Instagram_Request_Access(
-    client_id,
-    client_secret,
-    CODE,
-    authorization_redirect_uri)
-InstaAccess = final_token
-user_id = id
-
-# Token for the current session
-current_token = InstaAccess
 
 # USERS ENDPOINTS
 
 
 def user_info(user_id):
-    user_info_url = "https://api.instagram.com/v1/users/{user-id}/?access_token=%s" % (
+    user_info_url = "https://api.instagram.com/v1/users/%s/?access_token=%s" % (
         user_id, current_token)
     r = requests.get(user_info_url).text
     print(r)
@@ -634,8 +688,74 @@ def main():
     location_by_coordinate_parser.add_argument(
         "--DISTANCE", help="Default is 1000m (distance=1000), max distance is 5000.")
 
+    # oauth commands
+
+    refresh_token_parser = subparsers.add_parser(
+        "refresh_token",
+        help="Get another token for this session using the same client/user credentials.")
+
+    creds_parser = subparsers.add_parser(
+        "get_creds",
+        help="Command to store your Instagram username, password, client ID, client secret, and redirect URI.")
+    creds_parser.add_argument(
+        "--user_name",
+        help="Instagram username",
+        default=None)
+    creds_parser.add_argument(
+        "--password",
+        help="Instagram password for user account.",
+        default=None)
+    creds_parser.add_argument(
+        "--client_id",
+        help="app client id",
+        default=None)
+    creds_parser.add_argument(
+        "--client_secret",
+        help="app client secret",
+        default=None)
+    creds_parser.add_argument(
+        "--redirect_uri",
+        help="redirect URI registered with your client",
+        default=None)
+
     # parsing command line arguments
     arguments = parser.parse_args(sys.argv[1:])
+
+    command_check = arguments.command
+
+    # get_creds command check:
+    if command_check == 'get_creds':
+        print True
+        args = parser.parse_args()
+
+        print "this is args inside get_creds check: %s" % args
+
+        user_name = args.user_name if args.user_name else raw_input(
+            "Please submit Instagram username: ")
+        password = args.password if args.password else raw_input(
+            "Please submit Instagram password: ")
+        client_id = args.client_id if args.client_id else raw_input(
+            "Please submit client_id: ")
+        client_secret = args.client_secret if args.client_secret else raw_input(
+            "Please submit client_secret: ")
+        redirect_uri = args.redirect_uri if args.redirect_uri else raw_input(
+            "Please submit redirect_uri: ")
+        user_input_submissions = (
+            user_name,
+            password,
+            client_id,
+            client_secret,
+            redirect_uri)
+        if len(user_input_submissions) > 0:
+            userCreds = {
+                'user_name': user_name,
+                'password': password,
+                'client_id': client_id,
+                'client_secret': client_secret,
+                'redirect_uri': redirect_uri}
+            print "This is userCreds dict: %s" % userCreds
+            get_creds(userCreds)
+
     arguments = vars(arguments)
     command = arguments.pop("command")
 
@@ -662,7 +782,6 @@ def main():
     elif command == "get_comments":
         getcomments = get_comments(**arguments)
     # insert elif for COMMENTS and LIKES ENDPOINTS POST and DELETE requests
-
     elif command == "tag_info":
         taginfo = tag_info(**arguments)
     elif command == "recently_tagged":
@@ -675,6 +794,11 @@ def main():
         recentmedia_by_location = recent_media_by_location(**arguments)
     elif command == "location_by_coordinate":
         locationbycoordinate = location_by_coordinate(**arguments)
+    # oauth checks
+    elif command == "get_creds":
+        pass
+    elif command == "refresh_token":
+        refreshtoken = refresh_token(**arguments)
 
 if __name__ == "__main__":
     main()
