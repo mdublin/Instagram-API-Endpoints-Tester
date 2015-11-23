@@ -2,7 +2,7 @@
 Command line interface with oauth automation for testing Instagram's API during development process
 
 
-# Why use this when Instagram already has a Python library available?
+# Why use this when there's the Instagram Python library available?
 
 This is in no way intended to replace Instagram's Python library, which is available on Github. The reason I devised this script initially was because I was unable to get the access token script that's included in the Instagram Python library repository to work properly. I played with it for about a day or so then decided to write my own oauth script for grabbing the final authorization access token necessary for making API calls to the various endpoints. 
 
