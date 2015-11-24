@@ -76,15 +76,16 @@ except:
 # start token grab process from browser
 
 
-def grab_token(user_name, password):
-
+def grab_token(user_name, password, client_id, redirect_uri):
+    grab_url = "https://api.instagram.com/oauth/authorize/?client_id=%s&redirect_uri=%s&response_type=code" % (
+        client_id, redirect_uri)
     driver = webdriver.Chrome()
-    driver.get("https://api.instagram.com/oauth/authorize/?client_id=cb0096f08a3848e6a1b2b4601317355f&redirect_uri=http://pythondev.geometryfletch.com/instagramredirect.html&response_type=code")
+    driver.get(grab_url)
 
     element = driver.find_element_by_name("username")
-    element.send_keys("mddublin")
+    element.send_keys(user_name)
     element = driver.find_element_by_name("password")
-    element.send_keys("buggy111")
+    element.send_keys(password)
 
     driver.find_element_by_xpath('//input[@value = "Log in"]').click()
     print "This is the current response URL: %s" % driver.current_url
@@ -96,9 +97,6 @@ def grab_token(user_name, password):
     access_code = access_code_url_split[1]
     print (access_code)
     return access_code
-
-
-OAuthURL = "https://api.instagram.com/oauth/authorize/?client_id=cb0096f08a3848e6a1b2b4601317355f&redirect_uri=http://pythondev.geometryfletch.com/instagramredirect.html&response_type=code"
 
 
 grant_type = 'authorization_code'
