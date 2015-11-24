@@ -28,7 +28,7 @@ Probably the primary value proposition of this script is that the entire oauth p
     5. authorization uri
 
 2. Run `$ python InstagramAPICORE.py get_creds` and submit all of the above at the appropriate prompts. The `get_creds` command will store your credentials in the `creds.json` file and trigger Selenium to open an instance of Chrome in order to grab the final oauth token for your session. The final access token for this session will be stored the `finalToken.json` file. 
-3. Instagram's access tokens do not specificy an expiration time but typically a token will at least last 24 hours, sometimes longer. When you eventually get an API response that contains `error_type=OAuthAccessTokenError`, run the following command: `$ python InstagramAPICORE.py refresh_token` to obtain a new access token with our original credentials.
+3. Instagram's access tokens do not specificy an expiration time but typically a token will at least last 24 hours, sometimes longer. When you eventually get an API response that contains `error_type=OAuthAccessTokenError`, run the following command: `$ python InstagramAPICORE.py refresh_token` to obtain a new access token with your original credentials.
 
 **Using the script:**
 
