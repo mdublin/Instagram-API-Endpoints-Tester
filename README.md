@@ -35,7 +35,7 @@ Probably the primary value proposition of this script is that the entire oauth p
 The help option is as follows: 
 `$ python InstagramAPICore.py --help`
 
-An example using the tag_info command: 
+An example using the `tag_info` command: 
 
 `$ python InstagramAPICore.py tag_info seattle`
 
