@@ -8,7 +8,7 @@ This is in no way intended to replace Instagram's Python library, which is avail
 
 # What does this script actually do? 
 
-Probably the primary value proposition of this script is that the entire OAuth process is automated using Selenium. Unlike the access token script included in the Instagram Python library, the OAuth token procurment process here is entirely automated. The automation is intended to streamline the development process so that you don't have to bother with the semi-manual process of getting a new OAuth token for every session, but instead can just focus on calling the endpoints and exploring the responses you get back. To that end, the script is a command line interface for Instagram's API and of course all of the request functions included therein are easily extensible and can be adapted to whatever Python-based application you're integrating with Instagram.
+The primary value proposition of this script is that the entire OAuth process is automated using Selenium. Unlike the access token script included in the Instagram Python library, the OAuth token procurment process here is entirely automated. The automation is intended to streamline the development process so that you don't have to bother with the semi-manual process of getting a new OAuth token for every session, but instead can just focus on calling the endpoints and exploring the responses you get back. To that end, the script is a command line interface for Instagram's API and of course all of the request functions included therein are easily extensible and can be adapted to whatever Python-based application you're integrating with Instagram.
 
 **A few things before you get started:** 
 
