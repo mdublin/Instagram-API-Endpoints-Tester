@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Instagram-api-endpoints-tester by mdublin</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Instagram-api-endpoints-tester</h1>
+        <p>Command line interface with oauth automation for testing Instagram&#39;s API during development process</p>
+
+        <p class="view"><a href="https://github.com/mdublin/Instagram-API-Endpoints-Tester">View the Project on GitHub <small>mdublin/Instagram-API-Endpoints-Tester</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/mdublin/Instagram-API-Endpoints-Tester/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/mdublin/Instagram-API-Endpoints-Tester/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/mdublin/Instagram-API-Endpoints-Tester">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="instagram-api-endpoints-tester" class="anchor" href="#instagram-api-endpoints-tester" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instagram-API-Endpoints-Tester</h1>
+
+<p>Command line interface with oauth automation for testing Instagram's API during development process</p>
+
+<h1>
+<a id="why-use-this-when-theres-the-instagram-python-library-available" class="anchor" href="#why-use-this-when-theres-the-instagram-python-library-available" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why use this when there's the Instagram Python library available?</h1>
+
+<p>This is in no way intended to replace Instagram's Python library, which is available on Github. The reason I devised this script initially was because I was unable to get the access token script that's included in the Instagram Python library repository to work properly. I played with it for about a day or so then decided to write my own oauth script for grabbing the final authorization access token necessary for making API calls to the various endpoints. </p>
+
+<h1>
+<a id="what-does-this-script-actually-do" class="anchor" href="#what-does-this-script-actually-do" aria-hidden="true"><span class="octicon octicon-link"></span></a>What does this script actually do?</h1>
+
+<p>Probably the primary value proposition of this script is that the entire oauth process is automated using Selenium. Unlike the access token script included in the Instagram Python library, the oauth token procurment process here is entirely automated. The automation is intended to streamline the development process so that you don't have to bother with the semi-manual process of getting a new oauth token for every session, but instead can just focus on calling the endpoints and exploring the responses you get back. To that end, the script is a command line interface for Instagram's API and of course all of the request functions included therein are easily extensible and can be adapted to whatever Python-based application you're integrating with Instagram.</p>
+
+<p><strong>A few things before you get started:</strong> </p>
+
+<ol>
+<li>You need to create and register an app with Instagram. To do that, go here: <a href="https://instagram.com/developer/clients/register/">https://instagram.com/developer/clients/register/</a>
+</li>
+<li>Make sure you have Selenium installed. This script has been tested with Selenium version 2.46.0. For more info, go here: <a href="http://www.seleniumhq.org/download/">http://www.seleniumhq.org/download/</a>
+</li>
+<li>The script defaults to Chrome for the oauth automation procedure. If you would like to use another browser supported by Selenium, feel free, but you will have to change the following in the script on line 10: <code>driver = webdriver.Chrome()</code> </li>
+<li>This script uses Instagram's Server-side (Explicit) Flow to obtain an access token using the <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-12">OAuth 2.0 protocol</a>. To learn more about permissions scope, go here: <a href="https://instagram.com/developer/authentication/">https://instagram.com/developer/authentication/</a>
+</li>
+</ol>
+
+<p><strong>Setting up your user and client credentials for oauth token-grab process:</strong></p>
+
+<ol>
+<li>
+<p>Initial setup for this script requires you to provide the following credentials: </p>
+
+<ol>
+<li>username</li>
+<li>password</li>
+<li>client id</li>
+<li>client secret </li>
+<li>authorization uri</li>
+</ol>
+</li>
+<li><p>Run <code>$ python InstagramAPICORE.py get_creds</code> and submit all of the above at the appropriate prompts. The <code>get_creds</code> command will store your credentials in the <code>creds.json</code> file and trigger Selenium to open an instance of Chrome in order to grab the final oauth token for your session. The final access token for this session will be stored the <code>finalToken.json</code> file. </p></li>
+<li>Instagram's access tokens do not specificy an expiration time but typically a token will at least last 24 hours, sometimes longer. When you eventually get an API response that contains <code>error_type=OAuthAccessTokenError</code>, run the following command: <code>$ python InstagramAPICORE.py refresh_token</code> to obtain a new access token with your original credentials.</li>
+</ol>
+
+<p><strong>Using the script:</strong></p>
+
+<p>The help option is as follows: 
+<code>$ python InstagramAPICore.py --help</code></p>
+
+<p>An example using the <code>tag_info</code> command: </p>
+
+<p><code>$ python InstagramAPICore.py tag_info seattle</code></p>
+
+<p>This returns some basic information on the tag "seattle": </p>
+
+<p><code>{"meta":{"code":200},"data":{"media_count":7482177,"name":"seattle"}}</code></p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/mdublin">mdublin</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
