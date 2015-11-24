@@ -16,7 +16,19 @@ Probably the primary value proposition of this script is that the entire oauth p
 1. You need to create and register an app with Instagram. To do that, go here: https://instagram.com/developer/clients/register/
 2. Make sure you have Selenium installed. This script has been tested with Selenium version 2.46.0. For more info, go here: http://www.seleniumhq.org/download/
 3. The script defaults to Chrome for the oauth automation procedure. If you would like to use another browser supported by Selenium, feel free, but you will have to change the following in the script on line 10: `driver = webdriver.Chrome()` 
-    
+4. This script uses Instagram's Server-side (Explicit) Flow to obtain an access token using the [OAuth 2.0 protocol](http://tools.ietf.org/html/draft-ietf-oauth-v2-12). To learn more about permissions scope, go here: https://instagram.com/developer/authentication/
+
+**Setting up your user and client credentials for oauth token-grab process:**
+
+1. Initial setup for this script requires you to provide the following credentials: 
+    1. username
+    2. password
+    3. client id
+    4. client secret 
+    5. authorization uri
+
+2. Run `$ python InstagramAPICORE.py get_creds` and submit all of the above at the appropriate prompts. The `get_creds` command will store your credentials in the `creds.json` file and trigger Selenium to open an instance of Chrome in order to grab the final oauth token for your session. The final access token for this session will be stored the `finalToken.json` file. 
+3. Instagram's access tokens do not specificy an expiration time but typically a token will at least last 24 hours, sometimes longer. When you eventually get an API response that contains `error_type=OAuthAccessTokenError`, run the following command: `$ python InstagramAPICORE.py refresh_token` to obtain a new access token with our original credentials.
 
 **Using the script:**
 
