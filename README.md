@@ -8,7 +8,7 @@ This is in no way intended to replace Instagram's Python library, which is avail
 
 # What does this script actually do? 
 
-The primary value proposition of this script is that the entire OAuth process is automated using Selenium. Unlike the access token script included in the Instagram Python library, the OAuth token procurment process here is entirely automated. The automation is intended to streamline the development process so that you don't have to bother with the semi-manual process of getting a new OAuth token for every session, but instead can just focus on calling the endpoints and exploring the responses you get back. To that end, the script is a command line interface for Instagram's API and of course all of the request functions included therein are easily extensible and can be adapted to whatever Python-based application you're integrating with Instagram.
+The primary value proposition of this script is that the entire OAuth process is automated using Selenium. Unlike the access token script included in the Instagram Python library, the OAuth token procurement process here is entirely automated. The automation is intended to streamline the development process so that you don't have to bother with the semi-manual process of getting a new OAuth token for every session, but instead can just focus on calling the endpoints and exploring the responses you get back. To that end, the script is a command line interface for Instagram's API and of course all of the request functions included therein are easily extensible and can be adapted to whatever Python-based application you're integrating with Instagram.
 
 **A few things before you get started:** 
 
@@ -28,7 +28,7 @@ The primary value proposition of this script is that the entire OAuth process is
     5. authorization uri
 
 2. Run `$ python InstagramAPICORE.py get_creds` and submit all of the above at the appropriate prompts. The `get_creds` command will store your credentials in the `creds.json` file and trigger Selenium to open an instance of Chrome in order to grab the final OAuth token for your session. The final access token for this session will be stored the `finalToken.json` file. 
-3. Instagram's access tokens do not specificy an expiration time but typically a token will at least last 24 hours, sometimes longer. When you eventually get an API response that contains `error_type=OAuthAccessTokenError`, run the following command: `$ python InstagramAPICORE.py refresh_token` to obtain a new access token with your original credentials.
+3. Instagram's access tokens do not specify an expiration time but typically a token will at least last 24 hours, sometimes longer. When you eventually get an API response that contains `error_type=OAuthAccessTokenError`, run the following command: `$ python InstagramAPICORE.py refresh_token` to obtain a new access token with your original credentials.
 
 **Using the script:**
 
