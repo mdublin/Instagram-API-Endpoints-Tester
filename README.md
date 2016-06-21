@@ -4,11 +4,7 @@ Command line interface with OAuth automation for testing Instagram's API during 
 
 # Why use this when there's the Instagram Python library available?
 
-This is in no way intended to replace Instagram's Python library, which is available on Github. The reason I devised this script initially was because I was unable to get the access token script that's included in the Instagram Python library repository to work properly. I played with it for about a day or so then decided to write my own OAuth script for grabbing the final authorization access token necessary for making API calls to the various endpoints. 
-
-# What does this script actually do? 
-
-The primary value proposition of this script is that the entire OAuth process is automated using Selenium. Unlike the access token script included in the Instagram Python library, the OAuth token procurement process here is entirely automated. The automation is intended to streamline the development process so that you don't have to bother with the semi-manual process of getting a new OAuth token for every session, but instead can just focus on calling the endpoints and exploring the responses you get back. To that end, the script is a command line interface for Instagram's API and of course all of the request functions included therein are easily extensible and can be adapted to whatever Python-based application you're integrating with Instagram.
+This is in no way intended to replace Instagram's Python library, which is available on Github. The primary value proposition of this script is that, unlike the access token procurement process provided by the Instagram Python library, the OAuth process here is entirely automated using Selenium. The automation is intended to streamline the development process so that you don't have to bother with the semi-manual process of getting a new OAuth token for every session, but instead can just focus on calling the endpoints and exploring the responses you get back. To that end, the script is a command line interface for Instagram's API and of course all of the request functions included therein are easily extensible and can be adapted to whatever Python-based application you're integrating with Instagram.
 
 **A few things before you get started:** 
 
